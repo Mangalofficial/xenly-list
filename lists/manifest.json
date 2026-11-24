@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-24T15:59:51.684Z",
+  "generated": "2026-11-24T16:39:31.145Z",
   "files": {
     "hagezi-multi.txt": {
       "sha256": "7c59c17d4b5ffc7276b7daaebee63239bca4a6e3a3a81c7f4ef7b4c29d26c3ca",
@@ -10,6 +10,11 @@
       "sha256": "154ea588076582f904604fb744c23b5326f626a9601f1c25b751f42144400a3e",
       "bytes": 4332460,
       "lines": 221121
+    },
+    "oisd-small.txt": {
+      "sha256": "a80574c1a9b48cd54682c8991df3ca191817230ef6f419c342a73e6ecddee733",
+      "bytes": 1421924,
+      "lines": 62697
     }
   }
 }
