@@ -7,37 +7,40 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: update-lists
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Download lists
         run: |
           set -euo pipefail
           mkdir -p lists
-          curl -fsSL --retry 4 --retry-delay 5 --retry-all-errors --max-time 240 \
-            -A "xenly-mirror/1.0" \
-            "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/multi.txt" \
-            -o lists/hagezi-multi.txt
-          curl -fsSL --retry 4 --retry-delay 5 --retry-all-errors --max-time 240 \
-            -A "xenly-mirror/1.0" \
-            "https://raw.githubusercontent.com/sjhgvr/oisd/main/domainswild2_big.txt" \
-            -o lists/oisd-full.txt
-          for f in lists/hagezi-multi.txt lists/oisd-full.txt; do
-            n=$(grep -cve '^[[:space:]]*$' -e '^#' -e '^!' "$f" || true)
-            echo "$f -> $n lines"
-            test "$n" -ge 100000
-          done
+          fetch() {
+            url="$1"; out="$2"; min="$3"
+            curl -fsSL --retry 4 --retry-delay 5 --retry-all-errors --max-time 240 \
+              -A "xenly-mirror/1.0" "$url" -o "$out.tmp"
+            n=$(grep -cve '^[[:space:]]*$' -e '^#' -e '^!' "$out.tmp" || true)
+            echo "$out -> $n lines"
+            if [ "$n" -lt "$min" ]; then echo "::error::$out only $n lines"; exit 1; fi
+            mv "$out.tmp" "$out"
+          }
+          fetch "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/multi.txt" lists/hagezi-multi.txt 100000
+          fetch "https://raw.githubusercontent.com/sjhgvr/oisd/main/domainswild2_big.txt" lists/oisd-full.txt 150000
+          fetch "https://small.oisd.nl/" lists/oisd-small.txt 20000
 
       - name: Write manifest
         run: |
           node -e '
           const fs=require("fs"),c=require("crypto");
           const m={generated:new Date().toISOString(),files:{}};
-          for(const f of ["hagezi-multi.txt","oisd-full.txt"]){
+          for(const f of ["hagezi-multi.txt","oisd-full.txt","oisd-small.txt"]){
             const b=fs.readFileSync("lists/"+f);
             const lines=b.toString("utf8").split(/\r?\n/).filter(l=>l&&!l.startsWith("#")&&!l.startsWith("!")).length;
             m.files[f]={sha256:c.createHash("sha256").update(b).digest("hex"),bytes:b.length,lines};
