@@ -1,20 +1,20 @@
 {
-  "generated": "2026-11-27T11:40:40.736Z",
+  "generated": "2026-11-28T11:15:29.001Z",
   "files": {
     "hagezi-multi.txt": {
-      "sha256": "9b40ffa65de53329e75ec9607eea1bfdaf4490e5303eb18badd7c95fb6960325",
-      "bytes": 4313317,
-      "lines": 183508
+      "sha256": "ad39da419d7adf216994b4bda0312b1a26e95d93c46a563276e03a29af8af986",
+      "bytes": 4302604,
+      "lines": 183035
     },
     "oisd-full.txt": {
-      "sha256": "5f6fddba0dd9f9ad0e20d69b99debd8d4f52f64aebaf50551c115deb0e18fed8",
-      "bytes": 4352953,
-      "lines": 222296
+      "sha256": "68fade09636b9f0c384f659d9e84c08fdfadffcaab1858e031629f492398fcc4",
+      "bytes": 4333030,
+      "lines": 221752
     },
     "oisd-small.txt": {
-      "sha256": "7f4002d3af13e1c9fea21cb884b3aa4955d379400ad96c45b2e1c9ae88f7681c",
-      "bytes": 1437953,
-      "lines": 63415
+      "sha256": "9f0ea9c71ad105a80c3daf0f00714716b7723483f93cba88ec41b390f0aec256",
+      "bytes": 1443318,
+      "lines": 63656
     }
   }
 }
